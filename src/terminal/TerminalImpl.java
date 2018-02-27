@@ -27,14 +27,10 @@ public class TerminalImpl {
             try {
 
                 input = scanner.nextLine();
-
                 if (input.equals("q")) {break;}
-
                 if (pinValidator.validatePin(input)) {
-
                         server.runTerminal(scanner);
                 }
-
             } catch (NetworkProblemException e) {
                 server.sleep(e.getMessage());
             } catch (HardwareProblemException e) {

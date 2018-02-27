@@ -33,9 +33,7 @@ public class TerminalServer {
         if (Integer.valueOf(input) % 100==0) {  //Проверка на кратность ста.
 
             this.account = biFunction.apply(this.account, Integer.valueOf(input));
-
             showMessage.print(message + Integer.valueOf(input) +  ". Total: " + this.account);
-
             this.scanner.nextLine();
 
         } else {
@@ -55,17 +53,26 @@ public class TerminalServer {
 
     public void runTerminal (Scanner scanner) throws Exception {
         this.scanner = scanner;
-
-
+        List<MenuValue> menuValues = new ArrayList<>();
+        menuValues.add(new MenuValue("1", new ShowAccount()));
+        menuValues.add(new MenuValue("2", new CashPayment()));
+        menuValues.add(new MenuValue("3", new WithdrawCash()));
 
         for (;;) {
+            showMessage.menu(); //Отображает меню.
+            String input = this.scanner.nextLine();
 
             try {
-
                 randomException.random(); //Создаем свои исключения
-                showMessage.menu(); //Отображает меню.
-                String input = this.scanner.nextLine();
-                choise(input).TheActionWhenChoosing(this, showMessage);
+
+                if (input.equals("4")) {break;}
+                for (MenuValue m:menuValues) {
+
+                    if (m.getNumOfChoise().equals(input)) {
+                        m.getUserMenu().TheActionWhenChoosing(this, showMessage).run();
+                        break;
+                    }
+                }
 
             } catch (NumberFormatException e) {
 
@@ -75,12 +82,6 @@ public class TerminalServer {
         }
     }
 
-    private UserMenu choise (final String menuValue) {
-        if (menuValue.equals("1")) { return new ShowAccount(); }
-        if (menuValue.equals("2")) { return new CashPayment(); }
-        if (menuValue.equals("3")) { return new WithdrawCash(); }
-//        if (!menuChoise.contains(menuValue)){ return new ShowIfIncorrectInput(); }
-    }
 
 
     public final void sleep(String msg) {
