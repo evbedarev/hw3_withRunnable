@@ -2,19 +2,18 @@ package terminal.user_menu;
 
 public class MenuValue {
     String numOfChoise;
-    UserMenu userMenu;
+    Runnable runnable;
 
-    public MenuValue(String numOfChoise, UserMenu userMenu) {
+    public MenuValue(String numOfChoise, Runnable runnable) {
         this.numOfChoise = numOfChoise;
-        this.userMenu = userMenu;
+        this.runnable = runnable;
     }
 
     public String getNumOfChoise() {
         return numOfChoise;
     }
 
-    public UserMenu getUserMenu() {
-        return userMenu;
+    public Runnable getRunnable() {
+        return runnable;
     }
-
 }

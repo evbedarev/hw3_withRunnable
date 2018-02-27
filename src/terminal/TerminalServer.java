@@ -1,6 +1,5 @@
 package terminal;
 
-import java.util.Arrays;
 import java.util.Scanner;
 import java.util.function.BiFunction;
 import java.util.ArrayList;
@@ -8,7 +7,6 @@ import java.util.List;
 
 import terminal.user_menu.*;
 
-import javax.jws.soap.SOAPBinding;
 
 public class TerminalServer {
     Scanner scanner;
@@ -27,9 +25,7 @@ public class TerminalServer {
  */
     public void setAccount (String message, BiFunction<Integer, Integer, Integer> biFunction) {
         showMessage.print("Please enter value: ");
-
         String input = this.scanner.nextLine();  //Ввод суммы которую хотим внести
-
         if (Integer.valueOf(input) % 100==0) {  //Проверка на кратность ста.
 
             this.account = biFunction.apply(this.account, Integer.valueOf(input));
@@ -53,31 +49,39 @@ public class TerminalServer {
 
     public void runTerminal (Scanner scanner) throws Exception {
         this.scanner = scanner;
-        List<MenuValue> menuValues = new ArrayList<>();
-        menuValues.add(new MenuValue("1", new ShowAccount()));
-        menuValues.add(new MenuValue("2", new CashPayment()));
-        menuValues.add(new MenuValue("3", new WithdrawCash()));
 
         for (;;) {
-            showMessage.menu(); //Отображает меню.
+            showMessage.menu();                                 //Отображает меню.
             String input = this.scanner.nextLine();
-
             try {
-                randomException.random(); //Создаем свои исключения
-
+                randomException.random();                       //Создаем свои исключения
                 if (input.equals("4")) {break;}
-                for (MenuValue m:menuValues) {
-
-                    if (m.getNumOfChoise().equals(input)) {
-                        m.getUserMenu().TheActionWhenChoosing(this, showMessage).run();
-                        break;
-                    }
-                }
-
+                logicMenu(input);
             } catch (NumberFormatException e) {
-
                 sleep("Error. Please enter nubmer");
+            }
+        }
+    }
 
+/*
+*   Логика меню.
+*   Создается список объектов MenuValue.
+ */
+    private void logicMenu(String input) {
+        List<MenuValue> menuValues = new ArrayList<>();
+        menuValues.add(new MenuValue("1", () -> {
+            showMessage.print("On your account: " + getAccount());
+            showMessage.printPressAnyKey();
+        }));
+        menuValues.add(new MenuValue("2",() ->
+                setAccount("Add to your account: ", (x,y) -> x + y)));
+        menuValues.add(new MenuValue("3", () ->
+                setAccount("Withdraw from your account: ", (x,y) -> x - y)));
+
+        for (MenuValue m:menuValues) {                  //Перебор элементов списка
+            if (m.getNumOfChoise().equals(input)) {     //Сравниваем введенное значение с полем объекта MenuValue
+                m.getRunnable().run();
+                break;
             }
         }
     }
