@@ -1,3 +1,7 @@
+package terminal;
+
+import pin_processor.PinValidator;
+
 import java.util.Scanner;
 
 public class TerminalImpl {

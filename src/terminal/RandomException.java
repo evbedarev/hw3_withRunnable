@@ -1,3 +1,5 @@
+package terminal;
+
 import java.util.Random;
 
 public class RandomException {

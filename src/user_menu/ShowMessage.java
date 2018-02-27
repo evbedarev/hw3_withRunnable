@@ -1,3 +1,7 @@
+package user_menu;
+
+import terminal.TerminalServer;
+
 public class ShowMessage {
     TerminalServer terminalServer;
 
@@ -5,7 +9,7 @@ public class ShowMessage {
         this.terminalServer = terminalServer;
     }
     // Меню
-    protected final void menu() {
+    public final void menu() {
         System.out.println("=====================");
         System.out.println("Please enter command:");
         System.out.println("1 - check account");
@@ -16,11 +20,11 @@ public class ShowMessage {
     }
 
 
-    protected final void print(String message) {
+    public final void print(String message) {
         System.out.println(message);
     }
 
-    protected final void printPressAnyKey() {
+    public final void printPressAnyKey() {
         System.out.println("Press any key");
     }
 

@@ -1,3 +1,4 @@
+package pin_processor;
 
 public class PinValidator {
     private final String pinCode = "1234";

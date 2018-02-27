@@ -1,5 +1,8 @@
+package terminal;
+
 import java.util.Scanner;
 import java.util.function.BiFunction;
+import user_menu.ShowMessage;
 
 public class TerminalServer {
     private int account = 0;
