@@ -1,13 +1,8 @@
-package user_menu;
+package terminal.user_menu;
 
-import terminal.TerminalServer;
 
 public class ShowMessage {
-    TerminalServer terminalServer;
 
-    public ShowMessage(TerminalServer terminalServer) {
-        this.terminalServer = terminalServer;
-    }
     // Меню
     public final void menu() {
         System.out.println("=====================");

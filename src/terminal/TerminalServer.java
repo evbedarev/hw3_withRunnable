@@ -1,15 +1,23 @@
 package terminal;
 
+import java.util.Arrays;
 import java.util.Scanner;
 import java.util.function.BiFunction;
-import user_menu.ShowMessage;
+import java.util.ArrayList;
+import java.util.List;
+
+import terminal.user_menu.*;
+
+import javax.jws.soap.SOAPBinding;
 
 public class TerminalServer {
+    Scanner scanner;
     private int account = 0;
-    private ShowMessage showMessage = new ShowMessage(this);
+    private ShowMessage showMessage = new ShowMessage();
     private RandomException randomException = new RandomException();
 
-    private int getAccount() {
+
+    public int getAccount() {
         return account;
     }
 
@@ -17,18 +25,18 @@ public class TerminalServer {
 *Метод проверяющий кратность введенного числа ста, считающий операции.
 *
  */
-    private void setAccount (Scanner scanner, String message, BiFunction<Integer, Integer, Integer> biFunction) {
+    public void setAccount (String message, BiFunction<Integer, Integer, Integer> biFunction) {
         showMessage.print("Please enter value: ");
 
-        String input = scanner.nextLine();
+        String input = this.scanner.nextLine();  //Ввод суммы которую хотим внести
 
-        if (Integer.valueOf(input) % 100==0) {
+        if (Integer.valueOf(input) % 100==0) {  //Проверка на кратность ста.
 
             this.account = biFunction.apply(this.account, Integer.valueOf(input));
 
             showMessage.print(message + Integer.valueOf(input) +  ". Total: " + this.account);
 
-            scanner.nextLine();
+            this.scanner.nextLine();
 
         } else {
 
@@ -46,6 +54,8 @@ public class TerminalServer {
 
 
     public void runTerminal (Scanner scanner) throws Exception {
+        this.scanner = scanner;
+
 
 
         for (;;) {
@@ -54,21 +64,8 @@ public class TerminalServer {
 
                 randomException.random(); //Создаем свои исключения
                 showMessage.menu(); //Отображает меню.
-                String input = scanner.nextLine();
-                if (input.matches("[1234]")) { //Проверяем правильность ввода
-
-                    for (Choise ch : Choise.values()) {
-
-                        if (ch.num.equals(input)) {
-                            ch.value(this, scanner);
-                        }
-                    }
-
-                    if (input.equals("4")) {break;}
-
-                } else {
-
-                }
+                String input = this.scanner.nextLine();
+                choise(input).TheActionWhenChoosing(this, showMessage);
 
             } catch (NumberFormatException e) {
 
@@ -78,35 +75,11 @@ public class TerminalServer {
         }
     }
 
-    public enum Choise {
-        ONE("1") {
-            public void value(TerminalServer terminalServer, Scanner scanner) {
-                terminalServer.showMessage.print("On your account: " + terminalServer.getAccount());
-                terminalServer.showMessage.printPressAnyKey();
-                scanner.nextLine();
-            }
-        },
-
-        TWO("2"){
-            public void value(TerminalServer terminalServer, Scanner scanner) {
-                terminalServer.setAccount(scanner, "Add to your account: ", (x,y) -> x + y);
-
-            }
-        },
-
-        THREE("3") {
-            public void value(TerminalServer terminalServer, Scanner scanner) {
-                terminalServer.setAccount(scanner, "Withdraw from your account: ", (x,y) -> x - y);
-            }
-        };
-
-        String num;
-
-        Choise(String num) {
-            this.num = num;
-        }
-
-        public abstract void value(TerminalServer terminalServer, Scanner scanner);
+    private UserMenu choise (final String menuValue) {
+        if (menuValue.equals("1")) { return new ShowAccount(); }
+        if (menuValue.equals("2")) { return new CashPayment(); }
+        if (menuValue.equals("3")) { return new WithdrawCash(); }
+//        if (!menuChoise.contains(menuValue)){ return new ShowIfIncorrectInput(); }
     }
 
 
