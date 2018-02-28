@@ -31,9 +31,7 @@ public class TerminalImpl {
                 if (pinValidator.validatePin(input)) {
                         server.runTerminal(scanner);
                 }
-            } catch (NetworkProblemException e) {
-                server.sleep(e.getMessage());
-            } catch (HardwareProblemException e) {
+            } catch (NetworkProblemException|HardwareProblemException e) {
                 server.sleep(e.getMessage());
             } catch (Exception e) {
                 e.printStackTrace();
