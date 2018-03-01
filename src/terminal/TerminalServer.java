@@ -1,9 +1,7 @@
 package terminal;
 
-import java.util.Scanner;
+import java.util.*;
 import java.util.function.BiFunction;
-import java.util.ArrayList;
-import java.util.List;
 
 import terminal.user_menu.*;
 
@@ -19,22 +17,35 @@ public class TerminalServer {
         return account;
     }
 
-/*
+    public void setAccount(int account) {
+        if (account > 0) {
+            this.account = account;
+        } else {
+            System.out.println();
+        }
+    }
+
+    /*
 *Метод проверяющий кратность введенного числа ста, считающий операции.
 *
  */
     public void setAccount (String message, BiFunction<Integer, Integer, Integer> biFunction) {
         showMessage.print("Please enter value: ");
         String input = this.scanner.nextLine();  //Ввод суммы которую хотим внести
-        if (Integer.valueOf(input) % 100==0) {  //Проверка на кратность ста.
 
-            this.account = biFunction.apply(this.account, Integer.valueOf(input));
+        if ((Integer.valueOf(input) % 100==0) && ((biFunction.apply(this.account, Integer.valueOf(input))) > 0)) {  //Проверка на кратность ста.
+            setAccount(biFunction.apply(this.account, Integer.valueOf(input)));
             showMessage.print(message + Integer.valueOf(input) +  ". Total: " + this.account);
             this.scanner.nextLine();
+        }
 
-        } else {
+        if ((biFunction.apply(this.account, Integer.valueOf(input))) < 0) {
+            System.out.println("Not enough money. ");
+        }
 
-            showMessage.print("Enter number multiple one hundred");
+
+        if (Integer.valueOf(input) % 100!=0) {
+            System.out.println("Enter number multiple one hundred");
         }
 
         showMessage.printPressAnyKey();
@@ -48,6 +59,7 @@ public class TerminalServer {
 
 
     public void runTerminal (Scanner scanner) throws Exception {
+
         this.scanner = scanner;
 
         for (;;) {
@@ -68,22 +80,16 @@ public class TerminalServer {
 *   Создается список объектов MenuValue.
  */
     private void logicMenu(String input) {
-        List<MenuValue> menuValues = new ArrayList<>();
-        menuValues.add(new MenuValue("1", () -> {
-            showMessage.print("On your account: " + getAccount());
-            showMessage.printPressAnyKey();
-        }));
-        menuValues.add(new MenuValue("2",() ->
-                setAccount("Add to your account: ", (x,y) -> x + y)));
-        menuValues.add(new MenuValue("3", () ->
-                setAccount("Withdraw from your account: ", (x,y) -> x - y)));
-
-        for (MenuValue m:menuValues) {                  //Перебор элементов списка
-            if (m.getNumOfChoise().equals(input)) {     //Сравниваем введенное значение с полем объекта MenuValue
-                m.getRunnable().run();
-                break;
-            }
-        }
+        Map<String,Runnable> menuValueMap = new HashMap<>();
+        menuValueMap.put("1",() -> {
+                            showMessage.print("On your account: " + getAccount());
+                            showMessage.printPressAnyKey();
+                        });
+        menuValueMap.put("2", () ->
+                setAccount("Add to your account: ", (x,y) -> x + y));
+        menuValueMap.put("3", () ->
+                setAccount("Withdraw from your account: ", (x,y) -> x - y));
+        if(menuValueMap.containsKey(input)) {menuValueMap.get(input).run();}
     }
 
 
