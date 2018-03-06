@@ -13,11 +13,11 @@ public class TerminalServer {
     private RandomException randomException = new RandomException();
 
 
-    public int getAccount() {
+    private int getAccount() {
         return account;
     }
 
-    public void setAccount(int account) {
+    private void setAccount(int account) {
         if (account > 0) {
             this.account = account;
         } else {
@@ -25,11 +25,8 @@ public class TerminalServer {
         }
     }
 
-    /*
-*Метод проверяющий кратность введенного числа ста, считающий операции.
-*
- */
-    public void setAccount (String message, BiFunction<Integer, Integer, Integer> biFunction) {
+
+    private void setAccount (String message, BiFunction<Integer, Integer, Integer> biFunction) {
         showMessage.print("Please enter value: ");
         String input = this.scanner.nextLine();  //Ввод суммы которую хотим внести
 
@@ -51,22 +48,16 @@ public class TerminalServer {
         showMessage.printPressAnyKey();
     }
 
-/*
-Основной метод терминала, бесконечный цикл с выходом если пользователь ввёл 4.
-Сравнивает введенное значение со значением enum, если значения совпадает вызывается метод enum.value
-Обрабатывает NumberFormatException, всё остальное пробрасывает.
- */
-
 
     public void runTerminal (Scanner scanner) throws Exception {
 
         this.scanner = scanner;
 
         for (;;) {
-            showMessage.menu();                                 //Отображает меню.
+            showMessage.menu();
             String input = this.scanner.nextLine();
             try {
-                randomException.random();                       //Создаем свои исключения
+                randomException.random();
                 if (input.equals("4")) {break;}
                 logicMenu(input);
             } catch (NumberFormatException e) {
@@ -75,10 +66,8 @@ public class TerminalServer {
         }
     }
 
-/*
-*   Логика меню.
-*   Создается список объектов MenuValue.
- */
+
+
     private void logicMenu(String input) {
         Map<String,Runnable> menuValueMap = new HashMap<>();
         menuValueMap.put("1",() -> {

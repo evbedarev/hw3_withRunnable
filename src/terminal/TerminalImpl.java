@@ -7,16 +7,14 @@ import java.util.Scanner;
 public class TerminalImpl {
     private final TerminalServer server;
     private final PinValidator pinValidator;
-    Scanner scanner = new Scanner(System.in);
+    private Scanner scanner = new Scanner(System.in);
 
     private TerminalImpl(TerminalServer server, PinValidator pinValidator) {
         this.server = server;
         this.pinValidator = pinValidator;
     }
-/*
-*Запускает бесконечный цикл, выход при введении q.
-*Запрашивает пинкод. Запускает метод validatePin, если он возвращает true, запускает runTerminal.
- */
+
+
     private void run() {
         String input;
 
@@ -27,10 +25,14 @@ public class TerminalImpl {
             try {
 
                 input = scanner.nextLine();
-                if (input.equals("q")) {break;}
+                if (input.equals("q")) {
+                    break;
+                }
+
                 if (pinValidator.validatePin(input)) {
                         server.runTerminal(scanner);
                 }
+
             } catch (NetworkProblemException|HardwareProblemException e) {
                 server.sleep(e.getMessage());
             } catch (Exception e) {
@@ -42,15 +44,11 @@ public class TerminalImpl {
 
 
 
-
     public static void main(String[] args) {
         TerminalImpl terminal = new TerminalImpl(new TerminalServer(), new PinValidator());
         try {
-
             terminal.run();
-
         } finally {
-
             terminal.scanner.close();
 
         }
